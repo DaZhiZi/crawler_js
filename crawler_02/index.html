@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>country test</title>
+</head>
+
+<body>
+<div id="main" style="width: 700px;height:600px;"></div>
+<script src="echarts.js"></script>
+<script>
+    var log = console.log.bind(console)
+    let typeList = {
+        '美国': 144,
+        '中国大陆': 16,
+        '香港': 25,
+        '法国': 24,
+        '意大利': 12,
+        '日本': 33,
+        '英国': 34,
+        '印度': 4,
+        '瑞士': 4,
+        '德国': 20,
+        '加拿大': 7,
+        '冰岛': 1,
+        '韩国': 9,
+        '台湾': 7,
+        '新西兰': 3,
+        '波兰': 1,
+        '伊朗': 2,
+        '澳大利亚': 6,
+        '西班牙': 6,
+        '丹麦': 1,
+        '瑞典': 2,
+        '巴西': 2,
+        '奥地利': 1,
+        '阿联酋': 1,
+        '南非': 2,
+        '阿根廷': 1,
+        '爱尔兰': 1,
+        '捷克': 1,
+        '泰国': 1,
+        '西德': 1,
+        '博茨瓦纳': 1,
+    }
+
+    var itemList = Object.keys(typeList)
+    var Data = []
+    for (var i = 0; i < itemList.length; i++) {
+        var item = itemList[i]
+        var ob = {
+            value: '',
+            name: ''
+        }
+        ob.value = typeList[item]
+        ob.name = item
+        Data.push(ob)
+    }
+    log(Data)
+    var chart = echarts.init(document.getElementById('main'));
+    option = {
+        title: {
+            text: '豆瓣电影Top250国家',
+            subtext: '数据爬取自豆瓣',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            x: 'center',
+            y: 'bottom',
+            data: Object.keys(typeList)
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {
+                    show: true,
+                    type: ['pie', 'funnel']
+                },
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        series: [
+            {
+                name: '半径模式',
+                type: 'pie',
+                radius: [30, 110],
+                center: ['25%', '50%'],
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                lableLine: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: Data
+            },
+            {
+                name: '面积模式',
+                type: 'pie',
+                radius: [50, 110],
+                center: ['75%', '50%'],
+                roseType: 'area',
+                data: Data
+            }
+        ]
+    }
+
+    chart.setOption(option)
+</script>
+</body>
+
+</html>

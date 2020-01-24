@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="./echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 900px;height:600px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        const o = {
+            '犯罪': 45,
+            '剧情': 194,
+            '爱情': 58,
+            '动作': 30,
+            '喜剧': 46,
+            '动画': 32,
+            '奇幻': 32,
+            '悬疑': 33,
+            '冒险': 45,
+            '惊悚': 36,
+        }
+        const typesNames = Object.keys(o)
+        const numOfType = (obj) => {
+            let arr = []
+            for (let i = 0; i < typesNames.length; i++) {
+                let key = typesNames[i]
+                arr.push(o[key])
+            }
+            // log('arr', arr)
+            return arr
+        }
+        const typeNum = numOfType(o)
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '豆瓣电影 top 类型作品数 ',
+
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    }
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['作品数']
+            },
+            xAxis: {
+                data: typesNames,
+            },
+            yAxis: {},
+            series: [{
+                name: '作品数',
+                type: 'line',
+                data: typeNum,
+                markPoint: {
+                    data: [
+                        { type: 'max', name: '最大值' },
+                        { type: 'min', name: '最小值', symbol: 'arrow' }
+                    ]
+                },
+                markLine: {
+                    data: [
+                        { type: 'average', name: '平均值' }
+                    ]
+                }
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>豆瓣图书250爬虫</title>
+    <style media="screen">
+        #id-main-area {
+            margin: 0 auto;
+            text-align: center;
+            width: 1200px;
+            height: 820px;
+            outline: gray 2px solid;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 为 Chart 准备一个 合适大小的 DOM -->
+    <div id="id-main-area"></div>
+    <script src="echarts.min.js"></script>
+    <script>
+        var log = console.log.bind(console)
+
+        var takeoutCountryAndValue = () => {
+            var countryRatio =
+                [
+                    { '美': 32 },
+                    { '日': 21 },
+                    { '法': 7 },
+                    { '中国': 141 },
+                    { '哥伦比亚': 2 },
+                    { '捷克': 2 },
+                    { '英': 26 },
+                    { '美国': 1 },
+                    { '以色列': 2 },
+                    { '巴西': 1 },
+                    { '奥': 2 },
+                    { '法国': 1 },
+                    { '印': 1 },
+                    { '意': 4 },
+                    { '澳': 2 },
+                    { '德': 3 },
+                    { '意大利': 1 },
+                    { '瑞典': 1 },
+                ]
+
+            var l = []
+            var c = []
+            var v = []
+            for (var i = 0; i < countryRatio.length; i++) {
+                var key = Object.keys(countryRatio[i])[0]
+                c.push(key)
+                v.push(countryRatio[i][key])
+            }
+            l.push(c)
+            l.push(v)
+            return l
+        }
+
+
+
+        var dataObj = (arr) => {
+            var l = []
+            for (var i = 0; i < arr.length; i++) {
+                var oneData = {
+                    name: '',
+                    value: 0,
+                }
+                oneData.name = Object.keys(arr[i])[0]
+                oneData.value = arr[i][oneData.name]
+                l.push(oneData)
+            }
+            return l
+        }
+
+        var addFormatter = (arr) => {
+            var l = []
+            for (var i = 0; i < arr.length; i++) {
+                var au = arr[i].author
+                var ti = arr[i].title
+                var t = `  {author|${au}}{rateHead|${ti}}`
+                l.push(t)
+            }
+            return l
+        }
+
+        var takeoutFormatter = () => {
+            var japanbooks =
+                [
+                    { author: '东野圭吾', title: '解忧杂货店' },
+                    { author: '东野圭吾', title: '白夜行' },
+                    { author: '村上春树', title: '挪威的森林' },
+                    { author: '东野圭吾', title: '嫌疑人X的献身' },
+                    { author: '东野圭吾', title: '白夜行' },
+                    { author: '村上春树', title: '1Q84 BOOK 1' },
+                    { author: '东野圭吾', title: '恶意' },
+                    { author: '东野圭吾', title: '放学后' },
+                    { author: '青山七惠', title: '一个人的好天气' },
+                    { author: '村上春树', title: '海边的卡夫卡' },
+                    { author: '黑柳彻子', title: '窗边的小豆豆' },
+                    { author: '村上春树', title: '1Q84 BOOK 2' },
+                    { author: '岩井俊二', title: '情书' },
+                    { author: '村上春树', title: '挪威的森林' },
+                    { author: '村上春树', title: '当我谈跑步时我谈些什么' },
+                    { author: '井上雄彦', title: '灌篮高手31' },
+                    { author: '东野圭吾', title: '嫌疑人X的献身' },
+                    { author: '村上春树', title: '且听风吟' },
+                    { author: '东野圭吾', title: '幻夜' },
+                    { author: '高木直子', title: '一個人住第5年' },
+                    { author: '村上春树', title: '1Q84 BOOK 3' },
+                    { author: '岩井俊二', title: '关于莉莉周的一切' },
+                    { author: '藤子·F·不二雄', title: '机器猫哆啦A梦23' },
+                    { author: '东野圭吾', title: '嫌疑人X的献身' },
+                    { author: '尾田荣一郎', title: '海贼王' },
+                    { author: '川端康成', title: '伊豆的舞女' },
+                    { author: '村上春树', title: '世界尽头与冷酷仙境' }
+                ]
+
+            var formatter =
+                [
+                    '{title|{b}}{abg|}',
+                    '  {author|作者}{rateHead|书名}',
+                    '{hr|}'
+                ]
+            var addArr = addFormatter(japanbooks)
+            formatter = [...formatter, ...addArr]
+            return formatter
+        }
+
+        var insertLabel = () => {
+            var countryRatio =
+                [
+                    { '美': 32 },
+                    { '日': 21 },
+                    { '法': 7 },
+                    { '中国': 141 },
+                    { '哥伦比亚': 2 },
+                    { '捷克': 2 },
+                    { '英': 26 },
+                    { '美国': 1 },
+                    { '以色列': 2 },
+                    { '巴西': 1 },
+                    { '奥': 2 },
+                    { '法国': 1 },
+                    { '印': 1 },
+                    { '意': 4 },
+                    { '澳': 2 },
+                    { '德': 3 },
+                    { '意大利': 1 },
+                    { '瑞典': 1 },
+                ]
+            var data = dataObj(countryRatio)
+            var formatterArr = takeoutFormatter()
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].name == '日') {
+                    data[i].label =
+                        {
+                            normal: {
+                                formatter: formatterArr.join('\n'),
+                                backgroundColor: '#eee',
+                                borderColor: '#777',
+                                borderWidth: 1,
+                                borderRadius: 4,
+                                rich: {
+                                    title: {
+                                        color: '#eee',
+                                        align: 'center'
+                                    },
+                                    abg: {
+                                        backgroundColor: '#333',
+                                        width: '100%',
+                                        align: 'right',
+                                        height: 25,
+                                        borderRadius: [4, 4, 0, 0]
+                                    },
+                                    author: {
+                                        color: '#333',
+                                        height: 24,
+                                        width: 70,
+                                        align: 'left'
+                                    },
+                                    hr: {
+                                        borderColor: '#777',
+                                        width: '100%',
+                                        borderWidth: 0.5,
+                                        height: 0
+                                    },
+                                    rateHead: {
+                                        color: '#333',
+                                        width: 150,
+                                        align: 'right',
+                                        padding: [0, 10, 0, 0]
+                                    }
+                                }
+                            }
+                        }
+                }
+            }
+            return data
+        }
+
+        var showChart = () => {
+            var dataArr = takeoutCountryAndValue()
+            var countries = dataArr[0]
+            var dataCountryAndValue = insertLabel()
+            var element = document.querySelector('#id-main-area')
+            var myChart = echarts.init(element)
+            option = {
+                title: {
+                    text: '豆瓣图书TOP250',
+                    subtext: '数据来自豆瓣',
+                    left: 'center',
+                    top: 25,
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    // orient: 'vertical',
+                    // top: 'middle',
+                    bottom: 10,
+                    left: 'center',
+                    data: countries
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '50%'],
+                        selectedMode: 'single',
+                        data: dataCountryAndValue,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+        }
+
+        var __main = () => {
+            showChart()
+        }
+
+        __main()
+    </script>
+</body>
+
+</html>
