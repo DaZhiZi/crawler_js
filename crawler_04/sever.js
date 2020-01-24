@@ -1,5 +1,6 @@
 const { log , find2, findBetween, arrOfStr, } = require('./utils')
 // 系统标准库放在前面
+// node.js -- json格式文件 -- 文件处理 -- 数据处理 -- 数据可视化 -- 百度EChart
 const fs = require('fs')
 const request = require('syncrequest')
 /*
