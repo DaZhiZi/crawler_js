@@ -15,7 +15,6 @@ const Movie = function() {
     this.year = ''
     this.types = ''
 }
-
 const elseFromInfo = function(inform) {
     let obj = {}
     let s = inform
@@ -42,8 +41,8 @@ const movieFromDiv = function(div) {
         '                <div class="info">')
     let infom = findBetween(s, '<br>', '\n' +
         '                        </p>')
-    m.director = findBetween(s, '导演: ', '主演: ')
-    m.director =  m.director.split('&nbsp;&nbsp;')[0]
+    let director = findBetween(s, '导演: ', '主演: ')
+    m.director =  director.split('&nbsp;&nbsp;')[0]
     m.actor = findBetween(s, '主演: ', '<br>')
     /*
     obj.year = arr[0]
@@ -56,7 +55,6 @@ const movieFromDiv = function(div) {
     m.types = o.types
     return m
 }
-
 const saveMovies = function(movies) {
     // 这个函数用来把一个保存了所有电影对象的数组保存到文件中
     let fs = require('fs')
@@ -72,7 +70,6 @@ const saveMovies = function(movies) {
         }
     })
 }
-
 const cachedUrl = function (url) {
     // 通常爬虫会使用 syncrequest 来获取页面
     // 本次项目我们预先下载好了豆瓣电影 top250 的页面，所以通过以下方式来获取缓存好的文件
@@ -89,7 +86,6 @@ const cachedUrl = function (url) {
         // 所以这里不需要处理 else 的情况
     }
 }
-
 const divsFromHtml = function (html) {
     let divs = []
     let left = '<div class="item">'
@@ -106,7 +102,6 @@ const divsFromHtml = function (html) {
     }
     return divs
 }
-
 const moviesFromUrl = function (url) {
 
     let data = cachedUrl(url)
