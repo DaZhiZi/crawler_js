@@ -15,6 +15,8 @@
 
 ![movies country](./screenphoto/movie_country.png)
 
+![movies cover](./screenphoto/pic.jpg)
+
 豆瓣图书top250:
 
 ![book_country](./screenphoto/book_country.png)
