@@ -146,7 +146,12 @@ const moviesFromUrl = function (url) {
     // log('movies', movies)
     return movies
 }
-
+/*
+- pages
+    - page
+        - movies
+            - movie
+ */
 const main = () => {
     let movies = []
     for (let i = 0; i <= 225; i = i + 25) {
